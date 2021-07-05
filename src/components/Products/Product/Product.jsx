@@ -26,7 +26,7 @@ const handleAddToCart = () => onAddToCart(product.id, 1)
                 <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant='body2' color='textSecondary' />
             </CardContent>
             <CardActions disableSpacing className={classes.cardActions}>
-                <IconButton aria-label='Add to Cart' onClick={() => onAddToCart(handleAddToCart)}>
+                <IconButton aria-label='Add to Cart' onClick={handleAddToCart}>
                     <AddShoppingCart />
                 </IconButton>
             </CardActions>
