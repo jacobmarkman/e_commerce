@@ -7,7 +7,7 @@ import Review from './Review';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout, nextStep }) => {
+const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout, nextStep, timeout }) => {
     const handleSubmit = async (event, elements, stripe) => {
         event.preventDefault();
 
@@ -15,7 +15,7 @@ const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout,
 
         const cardElement = elements.getElement(CardElement);
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({ type: 'card', card: CardElement });
+        const { error, paymentMethod } = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
 
         if (error) {
             console.log(error);
@@ -41,6 +41,8 @@ const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout,
             }
             onCaptureCheckout(checkoutToken.id, orderData);
 
+            timeout();
+
             nextStep();
         }
     }
@@ -58,7 +60,7 @@ const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout,
                             <br /> <br />
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Button variant="outlined" onClick={backStep}>Back</Button>
-                                <Button type="submit" variant="contained" disabled={!stripe}>
+                                <Button type="submit" variant="contained" disabled={!stripe} color="primary">
                                     Pay {checkoutToken.live.subtotal.formatted_with_symbol}
                                 </Button>
                             </div>
